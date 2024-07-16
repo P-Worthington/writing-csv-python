@@ -1,11 +1,24 @@
 import csv
 
-data = [[10, 20, 30],[40, 50 , 60],[70, 80, 90]]
+# r read w write
+with open('names.csv', 'r') as csv_file:
+    #must use reader not DictReader 
+    csv_reader = csv.reader(csv_file)
 
-file = open("test.csv", "w")
+    #to step over first value usually the key 
+    next(csv_reader)
 
-writer = csv.writer(file)
+    # 2 is the index will only print email
+    for line in csv_reader:
+        print(line[2])
 
-for row in data:
-    writer.writerow(row)
-file.close()
+    with open('new_names.csv', 'w') as new_file:
+        fieldnames = ['first_name', 'last_name']
+
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter='\t')
+
+        csv_writer.writeheader()
+
+        for line in csv_reader:
+            del line['email']
+            csv_writer.writerow(line)
